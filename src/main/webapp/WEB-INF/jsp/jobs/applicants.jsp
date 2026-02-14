@@ -15,16 +15,27 @@
         <tr>
             <th>Application ID</th>
             <th>User ID</th>
-            <th>Job ID</th>
+            <th>Status</th>
+            <th>Action</th>
         </tr>
 
         <c:forEach var="app" items="${applications}">
             <tr>
                 <td>${app.id}</td>
                 <td>${app.userId}</td>
-                <td>${app.jobId}</td>
+                <td>${app.status}</td>
+                <td>
+                    <a href="/applications/approve/${app.id}" class="btn btn-success btn-sm">
+                        Approve
+                    </a>
+
+                    <a href="/applications/reject/${app.id}" class="btn btn-danger btn-sm ms-2">
+                        Reject
+                    </a>
+                </td>
             </tr>
         </c:forEach>
+
     </table>
 </div>
 

@@ -22,18 +22,12 @@ public class JobController {
     @Autowired
     private ApplicationService applicationService;
 
-    // ==============================
-    // SHOW ALL JOBS
-    // ==============================
     @GetMapping
     public String viewJobs(Model model) {
         model.addAttribute("jobs", jobService.getAllJobs());
-        return "job/jobList";   // <-- FIXED (job not jobs)
+        return "jobs/jobList";
     }
 
-    // ==============================
-    // SHOW ADD JOB PAGE (ADMIN ONLY)
-    // ==============================
     @GetMapping("/new")
     public String showAddJobPage(HttpSession session) {
 
@@ -43,12 +37,9 @@ public class JobController {
             return "redirect:/jobs";
         }
 
-        return "job/addJob";   // <-- FIXED
+        return "jobs/addJob";
     }
 
-    // ==============================
-    // SAVE JOB (ADMIN ONLY)
-    // ==============================
     @PostMapping("/save")
     public String saveJob(@ModelAttribute Job job, HttpSession session) {
 
@@ -62,44 +53,25 @@ public class JobController {
         return "redirect:/jobs";
     }
 
-    // ==============================
-    // APPLY FOR JOB (USER ONLY)
-    // ==============================
     @GetMapping("/apply/{jobId}")
     public String applyJob(@PathVariable Long jobId, HttpSession session) {
 
         User user = (User) session.getAttribute("loggedUser");
 
-        if (user == null) {
-            return "redirect:/login";
-        }
+        if (user == null) return "redirect:/login";
 
-        if (!"USER".equalsIgnoreCase(user.getRole())) {
+        if (!"USER".equalsIgnoreCase(user.getRole()))
             return "redirect:/jobs";
-        }
 
         applicationService.apply(jobId, user.getId());
 
         return "redirect:/jobs";
     }
 
-    // ==============================
-    // VIEW APPLICANTS (ADMIN ONLY)
-    // ==============================
     @GetMapping("/applicants/{jobId}")
-    public String viewApplicants(@PathVariable Long jobId,
-                                 Model model,
-                                 HttpSession session) {
-
-        User user = (User) session.getAttribute("loggedUser");
-
-        if (user == null || !"ADMIN".equalsIgnoreCase(user.getRole())) {
-            return "redirect:/jobs";
-        }
-
+    public String viewApplicants(@PathVariable Long jobId, Model model) {
         model.addAttribute("applications",
                 applicationService.getApplicationsByJobId(jobId));
-
-        return "job/applicants";   // <-- CORRECT
+        return "jobs/applicants";
     }
 }

@@ -11,8 +11,18 @@ public class Application {
 
     private Long jobId;
     private Long userId;
+    private String status;
 
-    // getters & setters
+    
+    public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	// getters & setters
     public Long getId() { return id; }
 
     public Long getJobId() { return jobId; }
